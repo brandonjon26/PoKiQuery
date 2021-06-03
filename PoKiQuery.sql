@@ -98,4 +98,51 @@ SELECT TOP 1 count(p.AuthorId) '# of poems', a.Name
 ORDER BY count(p.AuthorId) DESC;
 
 
+--16.
+SELECT count(p.Id) 'sad poems'
+	From Poem p
+		LEFT JOIN PoemEmotion pe ON pe.PoemId = p.Id
+		LEFT JOIN Emotion e ON pe.EmotionId = e.Id
+	WHERE e.Name = 'sadness';
+
+
+--17.
+SELECT count(p.Id) 'poems with no emotion'
+	FROM Poem p
+		LEFT JOIN PoemEmotion pe ON pe.PoemId = p.Id
+	WHERE pe.Id IS NULL;
+
+
+--18.
+SELECT TOP 1 e.Name, count(pe.EmotionId) 'least emotion count'
+	FROM PoemEmotion pe
+		LEFT JOIN Emotion e ON pe.EmotionId = e.Id
+	GROUP BY pe.EmotionId, e.Name
+ORDER BY count(pe.EmotionId);
+
+
+--19.
+SELECT TOP 1 g.Name, count(a.gradeId) '# of joy poems'
+	FROM Poem p
+		LEFT JOIN Author a ON a.id = p.AuthorId
+		LEFT JOIN Grade g ON g.id = a.GradeId
+		LEFT JOIN PoemEmotion pe ON p.id = pe.PoemId
+		LEFT JOIN Emotion e ON e.id = pe.EmotionId
+	WHERE e.Name = 'joy'
+GROUP BY a.GradeId, g.Name
+ORDER BY count(a.gradeId) DESC;
+
+
+--20.
+SELECT TOP 1 g.Name, count(a.genderId) '# of fear poems'
+	FROM Poem p
+		LEFT JOIN Author a ON a.id = p.AuthorId
+		LEFT JOIN Gender g ON g.id = a.GenderId
+		LEFT JOIN PoemEmotion pe ON p.id = pe.PoemId
+		LEFT JOIN Emotion e ON e.id = pe.EmotionId
+	WHERE e.Name = 'fear'
+GROUP BY a.GradeId, g.Name
+ORDER BY count(a.GenderId);
+
+
 
